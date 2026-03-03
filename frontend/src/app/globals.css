@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+@theme {
+  --color-gold: #d4a853;
+  --color-gold-light: #f0c96e;
+  --color-gold-dark: #a07830;
+  --color-bg: #0a0a0b;
+  --color-deep-red: #6e1a1a;
+  --color-warm-brown: #3d2b1f;
+  --color-card: #14110f;
+  --font-serif: "Playfair Display", "Fraunces", serif;
+  --font-sans: "Poppins", "Inter", system-ui, sans-serif;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #0a0a0b;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+@layer components {
+  .btn-gold {
+    @apply bg-gradient-to-br from-gold to-gold-dark text-black font-bold py-2 px-6 rounded-lg transition-all hover:scale-105 active:scale-95 shadow-lg shadow-gold/20;
+  }
+}
+
+/* Custom animations */
+@keyframes pulse-custom {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
+}
+
+@keyframes ken-burns {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1.15);
+  }
+}
+
+.animate-pulse-custom {
+  animation: pulse-custom 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-ken-burns {
+  animation: ken-burns 30s ease-in-out infinite alternate;
+}
+
+/* Toast Styles */
+.toast-wrap {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  min-width: 300px;
+  background: white;
+  color: black;
+  border-left: 4px solid #d4a853;
+  padding: 1rem 1.25rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  animation: slide-in 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toast-success {
+  border-color: #10b981;
+}
+
+.toast-error {
+  border-color: #ef4444;
+}
+
+.toast-info {
+  border-color: #d4a853;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
