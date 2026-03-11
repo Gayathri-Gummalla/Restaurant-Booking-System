@@ -9,6 +9,7 @@ export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const [user, setUser] = useState<any>(null);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -19,6 +20,9 @@ export default function Navbar() {
         const storedUser = localStorage.getItem('user');
         if (storedUser) setUser(JSON.parse(storedUser));
 
+        const adminToken = localStorage.getItem('adminToken');
+        if (adminToken) setIsAdmin(true);
+
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
@@ -28,13 +32,14 @@ export default function Navbar() {
         localStorage.removeItem('user');
         localStorage.removeItem('adminToken');
         setUser(null);
+        setIsAdmin(false);
         window.location.href = '/';
     };
 
     const navLinks = [
         { href: '/#cuisines', label: 'Cuisines' },
         { href: '/#about', label: 'About' },
-        ...(user ? [{ href: '/my-reservations', label: 'My Bookings' }] : []),
+        ...(isAdmin ? [{ href: '/admin/scanner', label: 'Scanner' }] : []),
     ];
 
     const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {

@@ -1,8 +1,9 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { X, Calendar, Clock, Users, ChevronRight, CheckCircle2, Layout, User as UserIcon, Phone, Mail } from 'lucide-react';
+import { X, Calendar, Clock, Users, ChevronRight, CheckCircle2, Layout, User as UserIcon, Phone, Mail, CreditCard, ShieldCheck, QrCode, RefreshCw, AlertCircle } from 'lucide-react';
 import { api } from '@/lib/api';
 import { ToastContainer, useToast } from '@/components/Toast';
+import { QRCodeSVG } from 'qrcode.react';
 
 interface Table {
     _id: string;
@@ -47,6 +48,15 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
     const [allTables, setAllTables] = useState<Table[]>([]);
     const [selectedTable, setSelectedTable] = useState<Table | null>(null);
     const [confirmation, setConfirmation] = useState<any>(null);
+    const [depositAmount, setDepositAmount] = useState(500);
+    const [isTableOversized, setIsTableOversized] = useState(false);
+    const [origin, setOrigin] = useState('');
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setOrigin(window.location.origin);
+        }
+    }, []);
 
     // Load available slots when date or guest count changes
     useEffect(() => {
@@ -136,8 +146,8 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
 
             if (res.success) {
                 setConfirmation(res.reservation);
-                setStep(4);
-                addToast('success', 'Table booked successfully!');
+                setStep(4); // Move to Payment Step
+                addToast('success', 'Details confirmed! Proceed to payment.');
             }
         } catch (err: any) {
             addToast('error', 'Booking failed', err.message);
@@ -172,7 +182,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                         <h2 className="font-serif text-2xl font-bold text-gray-900">Reserve a Table</h2>
                         <p className="text-gray-400 text-xs uppercase tracking-widest font-black flex items-center gap-2 mt-1">
                             <span className="w-2 h-2 rounded-full bg-gold" />
-                            Step {step} of 4
+                            Step {step} of 5
                         </p>
                     </div>
                     <button
@@ -296,6 +306,13 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                                                 onClick={() => {
                                                     setFormData({ ...formData, tableId: table._id });
                                                     setSelectedTable(table);
+                                                    if (table.capacity > formData.guestCount) {
+                                                        setIsTableOversized(true);
+                                                        setDepositAmount(800);
+                                                    } else {
+                                                        setIsTableOversized(false);
+                                                        setDepositAmount(500);
+                                                    }
                                                 }}
                                                 className={`aspect-square rounded-2xl p-4 flex flex-col items-center justify-center gap-2 transition-all border-2 relative ${isSelected
                                                     ? 'bg-gold border-gold text-white shadow-xl shadow-gold/30 -translate-y-1'
@@ -319,6 +336,20 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                                     })}
                                 </div>
                             </div>
+
+                            {isTableOversized && (
+                                <div className="p-6 bg-gold/5 border border-gold/20 rounded-3xl flex items-center gap-4 animate-in slide-in-from-top-2 duration-500">
+                                    <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center text-gold flex-shrink-0">
+                                        <AlertCircle size={24} />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-bold text-gray-900">Large Table Selection</p>
+                                        <p className="text-xs text-gray-500 leading-relaxed">
+                                            You've selected a table for {selectedTable?.capacity} guests. Since you have only {formData.guestCount} guests, a ₹300 premium space surcharge will be added to the booking deposit.
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
 
                             <div className="flex gap-4">
                                 <button
@@ -421,42 +452,134 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                                     onClick={handleConfirmBooking}
                                     className="h-16 flex-[2] bg-gold text-white rounded-2xl flex items-center justify-center gap-3 font-bold uppercase tracking-[0.2em] text-xs hover:bg-black transition-all duration-300 shadow-xl shadow-gold/20"
                                 >
-                                    {loading ? 'Processing...' : 'Complete Booking'}
+                                    {loading ? 'Processing...' : 'Review & Pay'}
                                 </button>
                             </div>
                         </div>
                     )}
 
-                    {/* Step 4: Confirmation */}
-                    {step === 4 && confirmation && (
-                        <div className="py-12 flex flex-col items-center text-center animate-in zoom-in duration-500">
-                            <div className="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center text-white mb-8 shadow-2xl shadow-green-200">
-                                <CheckCircle2 size={48} />
+                    {/* Step 4: Payment */}
+                    {step === 4 && (
+                        <div className="space-y-8 animate-in slide-in-from-right-4 duration-500 text-left">
+                            <div className="text-center mb-8">
+                                <div className="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-4 text-gold">
+                                    <CreditCard size={32} />
+                                </div>
+                                <h3 className="font-serif text-2xl font-bold text-gray-900">Secure Payment</h3>
+                                <p className="text-gray-500 text-sm">Complete your reservation with a small booking deposit</p>
                             </div>
-                            <h3 className="font-serif text-4xl font-black text-gray-900 mb-2">Booking Confirmed!</h3>
-                            <p className="text-gray-500 font-light mb-12">Your table is reserved. We look forward to serving you.</p>
 
-                            <div className="w-full bg-gray-50 rounded-[2.5rem] p-10 space-y-8 text-left border border-gray-100 relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 rounded-full -mr-16 -mt-16" />
+                            <div className="bg-gray-50 rounded-3xl p-6 border border-gray-100 space-y-4">
+                                <div className="flex justify-between items-center pb-4 border-b border-gray-200">
+                                    <span className="text-gray-500 font-medium">Standard Booking Deposit</span>
+                                    <span className="text-xl font-bold text-gray-900">₹500.00</span>
+                                </div>
+                                {isTableOversized && (
+                                    <div className="flex justify-between items-center pb-4 border-b border-gray-200 text-gold animate-in fade-in">
+                                        <span className="font-bold">Large Table Surcharge</span>
+                                        <span className="text-xl font-black">+ ₹300.00</span>
+                                    </div>
+                                )}
+                                <div className="flex justify-between items-center pt-2">
+                                    <span className="text-gray-900 font-bold">Total to Pay Now</span>
+                                    <span className="text-2xl font-serif font-black text-gold">₹{depositAmount}.00</span>
+                                </div>
+                            </div>
 
-                                <div className="grid grid-cols-2 gap-8 relative z-10">
-                                    <div>
-                                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-1">Confirmation Code</p>
-                                        <p className="font-mono text-lg font-black text-gold tracking-wider">{confirmation.confirmationCode}</p>
+                            <div className="space-y-4">
+                                <button
+                                    onClick={async () => {
+                                        if (!confirmation?._id) return;
+                                        setLoading(true);
+                                        // Simulate payment delay
+                                        await new Promise(resolve => setTimeout(resolve, 2000));
+
+                                        try {
+                                            const res = await api.updateReservation(confirmation._id, {
+                                                paymentStatus: 'paid',
+                                                paymentId: 'SIM-' + Math.random().toString(36).substring(2, 10).toUpperCase()
+                                            });
+
+                                            if (res.success) {
+                                                setConfirmation(res.reservation);
+                                                setStep(5);
+                                                addToast('success', 'Payment successful! Booking confirmed.');
+                                            }
+                                        } catch (err: any) {
+                                            addToast('error', 'Payment update failed', err.message);
+                                        } finally {
+                                            setLoading(false);
+                                        }
+                                    }}
+                                    className="w-full h-16 bg-black text-white rounded-2xl flex items-center justify-center gap-3 font-bold uppercase tracking-[0.2em] text-xs hover:bg-gold transition-all duration-300 shadow-xl"
+                                >
+                                    {loading ? <RefreshCw className="animate-spin" size={18} /> : (
+                                        <>
+                                            <ShieldCheck size={18} />
+                                            Pay Securely Now
+                                        </>
+                                    )}
+                                </button>
+                                <p className="text-[10px] text-center text-gray-400 uppercase tracking-widest font-bold">
+                                    Protected by 256-bit SSL Encryption
+                                </p>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Step 5: Confirmation */}
+                    {step === 5 && confirmation && (
+                        <div className="py-8 flex flex-col items-center text-center animate-in zoom-in duration-500">
+                            <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center text-white mb-6 shadow-2xl shadow-green-200">
+                                <CheckCircle2 size={40} />
+                            </div>
+                            <h3 className="font-serif text-3xl font-black text-gray-900 mb-2">Booking Confirmed!</h3>
+                            <p className="text-gray-500 text-sm mb-8">Show this QR code at the restaurant entrance.</p>
+
+                            <div className="w-full bg-gray-50 rounded-[2.5rem] p-8 space-y-6 text-left border border-gray-100 relative overflow-hidden">
+                                <div className="flex flex-col md:flex-row gap-8 items-center">
+                                    <div className="bg-white p-4 rounded-3xl shadow-xl border border-gray-100 flex-shrink-0">
+                                        <QRCodeSVG
+                                            value={JSON.stringify({
+                                                id: confirmation._id,
+                                                code: confirmation.confirmationCode,
+                                                name: confirmation.guestName,
+                                                email: confirmation.email,
+                                                phone: confirmation.phone,
+                                                date: confirmation.date,
+                                                time: confirmation.timeSlot,
+                                                guests: confirmation.guestCount,
+                                                table: confirmation.table?.tableNumber || '',
+                                                payment: confirmation.paymentStatus,
+                                                paymentId: confirmation.paymentId || '',
+                                                specialRequests: confirmation.specialRequests || '',
+                                                status: confirmation.status
+                                            })}
+                                            size={160}
+                                            level="H"
+                                            includeMargin={false}
+                                        />
                                     </div>
-                                    <div className="text-right">
-                                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-1">Guests</p>
-                                        <p className="font-serif text-lg font-bold text-gray-900">{confirmation.guestCount} People</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-1">Date & Time</p>
-                                        <p className="font-serif text-lg font-bold text-gray-900">
-                                            {new Date(confirmation.date).toLocaleDateString()} at {confirmation.timeSlot}
-                                        </p>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-1">Location</p>
-                                        <p className="font-serif text-lg font-bold text-gray-900">Table {selectedTable?.tableNumber}</p>
+
+                                    <div className="grid grid-cols-2 gap-x-8 gap-y-4 relative z-10 flex-1">
+                                        <div className="col-span-2">
+                                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-1">Confirmation Code</p>
+                                            <p className="font-mono text-lg font-black text-gold tracking-wider">{confirmation.confirmationCode}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-1">Guests</p>
+                                            <p className="font-serif text-base font-bold text-gray-900">{confirmation.guestCount} People</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-1">Table</p>
+                                            <p className="font-serif text-base font-bold text-gray-900">#{selectedTable?.tableNumber}</p>
+                                        </div>
+                                        <div className="col-span-2">
+                                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-1">Date & Time</p>
+                                            <p className="font-serif text-base font-bold text-gray-900">
+                                                {new Date(confirmation.date).toLocaleDateString()} at {confirmation.timeSlot}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

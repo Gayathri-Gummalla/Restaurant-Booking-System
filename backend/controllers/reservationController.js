@@ -11,7 +11,7 @@ const findAvailableTable = async (date, timeSlot, guestCount, excludeReservation
     const conflictQuery = {
         date: { $gte: searchDate, $lte: endDate },
         timeSlot,
-        status: 'confirmed',
+        status: { $in: ['confirmed', 'checked-in'] },
     };
 
     if (excludeReservationId) {
@@ -68,6 +68,7 @@ const createReservation = async (req, res) => {
         });
 
         await reservation.populate('table');
+        console.log(`✨ Reservation created: ${reservation.confirmationCode} for ${reservation.email}`);
 
         // Emit real-time update
         const io = req.app.get('io');
@@ -164,7 +165,7 @@ const getReservationById = async (req, res) => {
 const updateReservation = async (req, res) => {
     try {
         const { id } = req.params;
-        const { guestCount, date, timeSlot, specialRequests, status } = req.body;
+        const { guestCount, date, timeSlot, specialRequests, status, paymentStatus, paymentId } = req.body;
 
         const reservation = await Reservation.findById(id).populate('table');
         if (!reservation) {
@@ -209,6 +210,8 @@ const updateReservation = async (req, res) => {
         if (guestCount) reservation.guestCount = parseInt(guestCount);
         if (specialRequests !== undefined) reservation.specialRequests = specialRequests;
         if (status && req.isAdmin) reservation.status = status;
+        if (paymentStatus) reservation.paymentStatus = paymentStatus;
+        if (paymentId) reservation.paymentId = paymentId;
         reservation.table = newTable._id;
 
         await reservation.save();

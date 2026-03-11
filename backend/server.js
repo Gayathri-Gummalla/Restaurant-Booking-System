@@ -42,7 +42,9 @@ app.use('/api/admin', require('./routes/adminRoutes'));
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'Restaurant Booking API is running' });
+  const dbStatus = require('mongoose').connection.readyState === 1 ? 'connected' : 'disconnected';
+  const dbName = require('mongoose').connection.name;
+  res.json({ status: 'ok', db: { status: dbStatus, name: dbName }, message: 'Restaurant Booking API is running' });
 });
 
 // Socket.io event handling

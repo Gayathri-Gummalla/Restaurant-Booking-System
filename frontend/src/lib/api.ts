@@ -65,5 +65,10 @@ export const api = {
         }),
     getOccupancy: (startDate: string, endDate: string) =>
         request<any>(`/admin/occupancy?startDate=${startDate}&endDate=${endDate}`),
+    checkIn: (id: string) =>
+        request<any>(`/admin/reservations/${id}/status`, {
+            method: 'PUT',
+            body: JSON.stringify({ status: 'checked-in' }),
+        }),
     request,
 };
