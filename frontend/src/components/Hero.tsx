@@ -1,4 +1,48 @@
 'use client';
+import { useState, useEffect } from 'react';
+import { api } from '@/lib/api';
+
+function OccupancyIndicator() {
+    const [stats, setStats] = useState<any>(null);
+
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const res = await api.getSummary();
+                if (res.success) setStats(res);
+            } catch (err) {
+                console.error('Failed to fetch occupancy', err);
+            }
+        };
+        fetchStats();
+        const interval = setInterval(fetchStats, 60000); // Update every minute
+        return () => clearInterval(interval);
+    }, []);
+
+    if (!stats) return null;
+
+    const isHigh = stats.occupancyRate > 70;
+    const isFull = stats.occupancyRate >= 95;
+
+    return (
+        <div className="flex items-center gap-3 px-6 py-3 bg-black/40 backdrop-blur-xl rounded-full border border-white/10 shadow-2xl animate-in fade-in slide-in-from-bottom-2 duration-700 delay-500">
+            <div className={`w-2 h-2 rounded-full animate-pulse shadow-[0_0_10px_currentColor] ${isFull ? 'text-red-500 bg-red-500' :
+                isHigh ? 'text-orange-500 bg-orange-500' : 'text-green-500 bg-green-500'
+                }`} />
+            <div className="flex flex-col items-start leading-none">
+                <span className="text-[10px] text-white/90 uppercase font-black tracking-[0.2em]">
+                    {isFull ? 'Restaurant is Full' :
+                        isHigh ? 'High Demand Today' : 'Tables Available Now'}
+                </span>
+                {stats.occupancyRate > 0 && (
+                    <span className="text-[8px] text-gold uppercase font-bold tracking-widest mt-1 opacity-80">
+                        {stats.occupancyRate}% Capacity • {stats.bookedToday} Bookings Today
+                    </span>
+                )}
+            </div>
+        </div>
+    );
+}
 
 export default function Hero() {
     return (
@@ -34,6 +78,11 @@ export default function Hero() {
                     <p className="font-serif text-xl md:text-[2.5vw] text-white italic font-light max-w-5xl mx-auto leading-tight drop-shadow-2xl opacity-100">
                         “Experience the Royal Essence of <br /> Andhra Cuisine”
                     </p>
+
+                    {/* Live Occupancy Status */}
+                    <div className="pt-8 flex justify-center">
+                        <OccupancyIndicator />
+                    </div>
                 </div>
             </div>
 

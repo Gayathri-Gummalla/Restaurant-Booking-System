@@ -239,24 +239,52 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                                     {slots.length === 0 ? (
                                         <div className="col-span-full py-12 text-center text-gray-400 italic">
-                                            Loading available slots...
+                                            No slots available for this date/guest count.
                                         </div>
                                     ) : (
-                                        slots.map((slot) => (
-                                            <button
-                                                key={slot.timeSlot}
-                                                disabled={!slot.isAvailable}
-                                                onClick={() => setFormData({ ...formData, timeSlot: slot.timeSlot })}
-                                                className={`h-12 rounded-xl flex items-center justify-center font-bold text-sm transition-all border ${formData.timeSlot === slot.timeSlot
-                                                    ? 'bg-gold text-white border-gold shadow-lg shadow-gold/20'
-                                                    : slot.isAvailable
-                                                        ? 'bg-white border-gray-100 text-gray-900 hover:border-gold hover:text-gold'
-                                                        : 'bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed opacity-50'
-                                                    }`}
-                                            >
-                                                {slot.timeSlot}
-                                            </button>
-                                        ))
+                                        (() => {
+                                            const availableSlots = slots.filter(s => s.isAvailable);
+                                            return slots.map((slot) => {
+                                                const nextAvailable = availableSlots.find((s) => {
+                                                    // Find the first available slot that is after this current slot
+                                                    const currentIndex = slots.findIndex(orig => orig.timeSlot === slot.timeSlot);
+                                                    const slotIndex = slots.findIndex(orig => orig.timeSlot === s.timeSlot);
+                                                    return slotIndex > currentIndex;
+                                                });
+
+                                                return (
+                                                    <div key={slot.timeSlot} className="relative group">
+                                                        <button
+                                                            disabled={!slot.isAvailable}
+                                                            onClick={() => setFormData({ ...formData, timeSlot: slot.timeSlot })}
+                                                            className={`w-full h-14 rounded-xl flex flex-col items-center justify-center transition-all border relative overflow-hidden ${formData.timeSlot === slot.timeSlot
+                                                                ? 'bg-gold text-white border-gold shadow-lg shadow-gold/20'
+                                                                : slot.isAvailable
+                                                                    ? 'bg-white border-gray-100 text-gray-900 hover:border-gold hover:text-gold'
+                                                                    : 'bg-gray-50 border-gray-100 text-gray-400 cursor-not-allowed'
+                                                                }`}
+                                                        >
+                                                            <span className={`text-sm font-black ${!slot.isAvailable && 'opacity-50'}`}>{slot.timeSlot}</span>
+                                                            {!slot.isAvailable ? (
+                                                                <span className="text-[8px] font-black uppercase tracking-widest text-red-500 mt-1">Filled</span>
+                                                            ) : slot.available <= 2 ? (
+                                                                <span className="text-[8px] font-black uppercase tracking-widest text-orange-500 mt-1">
+                                                                    Only {slot.available} Left
+                                                                </span>
+                                                            ) : null}
+                                                        </button>
+
+                                                        {/* Tooltip for next available slot */}
+                                                        {!slot.isAvailable && nextAvailable && (
+                                                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-gray-900 text-white rounded-lg text-[9px] font-black uppercase tracking-widest whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 shadow-xl">
+                                                                Next Available: {nextAvailable.timeSlot}
+                                                                <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900" />
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                );
+                                            });
+                                        })()
                                     )}
                                 </div>
                             </div>

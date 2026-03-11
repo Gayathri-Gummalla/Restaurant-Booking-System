@@ -11,6 +11,7 @@ export default function MenuPage() {
     const categoryId = params.id as string;
     const category = menuData[categoryId];
     const [isScrolled, setIsScrolled] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
     const [isBookingOpen, setIsBookingOpen] = useState(false);
 
     useEffect(() => {
@@ -18,8 +19,60 @@ export default function MenuPage() {
             setIsScrolled(window.scrollY > 50);
         };
         window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+
+        const checkAuth = () => {
+            const user = localStorage.getItem('user');
+            setIsAuthenticated(!!user);
+        };
+        checkAuth();
+        window.addEventListener('storage', checkAuth);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('storage', checkAuth);
+        };
     }, []);
+
+    if (isAuthenticated === null) {
+        return <div className="min-h-screen bg-black" />; // Loading state
+    }
+
+    if (!isAuthenticated) {
+        return (
+            <div className="min-h-screen bg-black flex flex-col items-center justify-center p-6 text-center">
+                <div className="absolute inset-0 opacity-20">
+                    <img
+                        src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=2000"
+                        className="w-full h-full object-cover"
+                    />
+                </div>
+                <div className="relative z-10 max-w-md space-y-8 animate-in fade-in zoom-in duration-700">
+                    <div className="w-20 h-20 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-8 border border-gold/30">
+                        <ChefHat size={40} className="text-gold" />
+                    </div>
+                    <div className="space-y-4">
+                        <h1 className="font-serif text-4xl md:text-5xl font-black text-white tracking-tight">Members Only</h1>
+                        <p className="text-gray-400 font-medium leading-relaxed italic">
+                            “Join our inner circle to explore the culinary secrets and royal flavors of Andhra.”
+                        </p>
+                    </div>
+                    <div className="pt-8 flex flex-col gap-4">
+                        <Link
+                            href="/auth"
+                            className="bg-gold text-black font-black text-xs uppercase tracking-[0.2em] py-5 rounded-full shadow-2xl shadow-gold/20 hover:bg-[#c29744] transition-all transform hover:-translate-y-1"
+                        >
+                            Login / Register to View Menu
+                        </Link>
+                        <Link
+                            href="/"
+                            className="text-white/50 hover:text-white font-black text-[10px] uppercase tracking-[0.3em] transition-all"
+                        >
+                            Return to Homepage
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     if (!category) {
         return (

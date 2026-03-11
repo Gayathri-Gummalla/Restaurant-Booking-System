@@ -25,7 +25,7 @@ const getAvailability = async (req, res) => {
         const bookedReservations = await Reservation.find({
             date: { $gte: searchDate, $lte: endDate },
             timeSlot,
-            status: 'confirmed',
+            status: { $in: ['confirmed', 'checked-in'] },
         }).select('table');
 
         const bookedTableIds = bookedReservations.map((r) => r.table.toString());
@@ -94,7 +94,7 @@ const getTimeSlotAvailability = async (req, res) => {
         // Get all confirmed reservations for that date
         const reservations = await Reservation.find({
             date: { $gte: searchDate, $lte: endDate },
-            status: 'confirmed',
+            status: { $in: ['confirmed', 'checked-in'] },
         }).select('table timeSlot');
 
         // Get all active tables
@@ -134,4 +134,32 @@ const getTimeSlotAvailability = async (req, res) => {
     }
 };
 
-module.exports = { getAvailability, getTimeSlotAvailability };
+// Get high-level summary for today
+const getSummary = async (req, res) => {
+    try {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const tonight = new Date(today);
+        tonight.setHours(23, 59, 59, 999);
+
+        const [totalTables, bookedToday] = await Promise.all([
+            Table.countDocuments({ isActive: true }),
+            Reservation.countDocuments({
+                date: { $gte: today, $lte: tonight },
+                status: { $in: ['confirmed', 'checked-in'] },
+            }),
+        ]);
+
+        res.json({
+            success: true,
+            totalTables,
+            bookedToday,
+            occupancyRate: totalTables > 0 ? Math.round((bookedToday / (totalTables * 19)) * 100) : 0, // Assuming 19 slots per table
+            message: bookedToday >= (totalTables * 15) ? 'High Demand' : 'Normal',
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+module.exports = { getAvailability, getTimeSlotAvailability, getSummary };

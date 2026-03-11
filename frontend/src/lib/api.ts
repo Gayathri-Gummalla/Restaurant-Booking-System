@@ -29,6 +29,7 @@ export const api = {
         request<any>(`/availability/slots?date=${date}${guestCount ? `&guestCount=${guestCount}` : ''}`),
     getAvailability: (date: string, timeSlot: string, guestCount?: number) =>
         request<any>(`/availability?date=${date}&timeSlot=${timeSlot}${guestCount ? `&guestCount=${guestCount}` : ''}`),
+    getSummary: () => request<any>('/availability/summary'),
 
     // Reservations
     createReservation: (body: any) =>
