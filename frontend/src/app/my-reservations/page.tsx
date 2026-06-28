@@ -165,3 +165,4 @@ function InfoItem({ icon: Icon, label, value }: any) {
         </div>
     );
 }
+ 

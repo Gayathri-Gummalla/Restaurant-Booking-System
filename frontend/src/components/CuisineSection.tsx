@@ -12,7 +12,7 @@ const cuisines = [
         id: "south-indian-delicacies",
         name: "South Indian Delicacies",
         description: "Crispy dosas, fluffy idlis, and aromatic sambar crafted with traditional recipes.",
-        image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?q=80&w=1000"
+        image: "/images/south-indian-banner.png"
     },
     {
         id: "tandoori-grilled-specials",

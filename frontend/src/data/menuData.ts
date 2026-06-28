@@ -83,14 +83,14 @@ export const menuData: Record<string, MenuCategory> = {
         id: "south-indian-delicacies",
         name: "South Indian Delicacies",
         description: "Timeless favorites from across South India, perfected with house-made batters and pure ghee.",
-        bannerImage: "/images/hero-bg-royal-hd.png",
+        bannerImage: "/images/south-indian-banner.png",
         items: [
             {
                 id: "masala-dosa",
                 name: "Masala Dosa",
                 description: "Crispy golden dosa stuffed with spiced potato masala, served with 3 types of chutneys and hot sambar.",
                 price: 180,
-                image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&q=80&w=1200",
+                image: "/images/masala-dosa.png",
                 isVeg: true,
                 spiceLevel: 1
             },
@@ -99,7 +99,7 @@ export const menuData: Record<string, MenuCategory> = {
                 name: "Ghee Roast Dosa",
                 description: "Extra crispy dosa roasted in pure, aromatic ghee for a melt-in-your-mouth experience.",
                 price: 210,
-                image: "https://images.unsplash.com/photo-1668236543090-82eba5ee5976?auto=format&fit=crop&q=80&w=1200",
+                image: "/images/ghee-roast-dosa.png",
                 isVeg: true,
                 spiceLevel: 0
             },
@@ -108,7 +108,7 @@ export const menuData: Record<string, MenuCategory> = {
                 name: "Pesarattu",
                 description: "Andhra-style green gram dosa, high in nutrition and full of earthy flavor. Best enjoyed with ginger chutney.",
                 price: 160,
-                image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=1200",
+                image: "/images/pesarattu.png",
                 isVeg: true,
                 spiceLevel: 1
             },
@@ -117,7 +117,7 @@ export const menuData: Record<string, MenuCategory> = {
                 name: "Medu Vada",
                 description: "Crispy fried urad dal fritters, fluffy inside and golden outside. Served with chutney & sambar.",
                 price: 120,
-                image: "https://images.unsplash.com/photo-1630409351241-e90e7f5e434d?auto=format&fit=crop&q=80&w=1200",
+                image: "/images/medu-vada.png",
                 isVeg: true,
                 spiceLevel: 1
             },
@@ -126,7 +126,7 @@ export const menuData: Record<string, MenuCategory> = {
                 name: "Pongal",
                 description: "Creamy comfort rice and moong dal tempered with ghee, black pepper, ginger, and curry leaves.",
                 price: 150,
-                image: "https://images.unsplash.com/photo-1589301773838-892404f29119?auto=format&fit=crop&q=80&w=1200",
+                image: "/images/pongal.png",
                 isVeg: true,
                 spiceLevel: 0
             },
@@ -135,7 +135,7 @@ export const menuData: Record<string, MenuCategory> = {
                 name: "Mini Tiffin Combo",
                 description: "The best of everything: 1 Idli, 1 Vada, and a small Masala Dosa served with all accompaniments.",
                 price: 280,
-                image: "https://images.unsplash.com/photo-1610192244261-3f33de3f55e4?auto=format&fit=crop&q=80&w=1200",
+                image: "/images/mini-tiffin-combo.png",
                 isVeg: true,
                 spiceLevel: 1
             }
@@ -145,14 +145,14 @@ export const menuData: Record<string, MenuCategory> = {
         id: "tandoori-grilled-specials",
         name: "Tandoori & Grilled Specials",
         description: "Smoky, charred, and tender delicacies from our clay oven.",
-        bannerImage: "/images/hero-bg.png",
+        bannerImage: "/images/tandoori-grilled-banner.png",
         items: [
             {
                 id: "tandoori-chicken",
                 name: "Tandoori Chicken",
                 description: "The classic king of tandoor. Whole chicken marinated in yogurt and spices, roasted in the clay oven.",
                 price: 420,
-                image: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&q=80&w=1200",
+                image: "/images/tandoori-chicken.png",
                 isVeg: false,
                 spiceLevel: 2
             },
@@ -161,7 +161,7 @@ export const menuData: Record<string, MenuCategory> = {
                 name: "Chicken Tikka",
                 description: "Boneless chicken cubes marinated in a spicy yogurt mix and grilled to smoky perfection.",
                 price: 380,
-                image: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&q=80&w=1200",
+                image: "/images/chicken-tikka.png",
                 isVeg: false,
                 spiceLevel: 2
             },
@@ -170,7 +170,7 @@ export const menuData: Record<string, MenuCategory> = {
                 name: "Paneer Tikka",
                 description: "Chunks of fresh cottage cheese, peppers, and onions marinated in tandoori masala and skewed.",
                 price: 340,
-                image: "https://images.unsplash.com/photo-1567184109191-3783bcca3583?auto=format&fit=crop&q=80&w=1200",
+                image: "/images/paneer-tikka.png",
                 isVeg: true,
                 spiceLevel: 2
             },
@@ -179,7 +179,7 @@ export const menuData: Record<string, MenuCategory> = {
                 name: "Tangdi Kebab",
                 description: "Juicy chicken drumsticks marinated in a royal blend of spices and grilled in the tandoor.",
                 price: 450,
-                image: "https://images.unsplash.com/photo-1626776878893-680c65793077?auto=format&fit=crop&q=80&w=1200",
+                image: "/images/tangdi-kebab.png",
                 isVeg: false,
                 spiceLevel: 2
             },
@@ -188,7 +188,7 @@ export const menuData: Record<string, MenuCategory> = {
                 name: "Mutton Seekh Kebab",
                 description: "Spiced minced mutton flavored with mint and coriander, grilled on skewers in the clay oven.",
                 price: 490,
-                image: "https://images.unsplash.com/photo-1628294895950-9805252327bc?auto=format&fit=crop&q=80&w=1200",
+                image: "/images/mutton-seekh-kebab.png",
                 isVeg: false,
                 spiceLevel: 3
             },
@@ -197,7 +197,7 @@ export const menuData: Record<string, MenuCategory> = {
                 name: "Mixed Grill Platter",
                 description: "A decadent assortment of Chicken Tikka, Seekh Kebab, and Tandoori Prawns served sizzling.",
                 price: 850,
-                image: "https://images.unsplash.com/photo-1544124499-58912cbddaad?auto=format&fit=crop&q=80&w=1200",
+                image: "/images/mixed-grill-platter.png",
                 isVeg: false,
                 spiceLevel: 2
             }
@@ -207,14 +207,14 @@ export const menuData: Record<string, MenuCategory> = {
         id: "mughlai-classics",
         name: "Mughlai Classics",
         description: "Rich, aromatic, and decadent gravies from the royal kitchens.",
-        bannerImage: "/images/andhra-veg-thali.jpg",
+        bannerImage: "/images/mughlai-classics-banner.png",
         items: [
             {
                 id: "butter-chicken",
                 name: "Butter Chicken",
                 description: "Succulent charcoal-grilled chicken in a silky, creamy tomato-based rich buttery gravy.",
                 price: 420,
-                image: "https://images.unsplash.com/photo-1603894584714-f4b2b604a05a?auto=format&fit=crop&q=80&w=1200",
+                image: "/images/butter-chicken-premium.png",
                 isVeg: false,
                 spiceLevel: 1
             },
@@ -232,7 +232,7 @@ export const menuData: Record<string, MenuCategory> = {
                 name: "Chicken Korma",
                 description: "A royal mild gravy made with nuts, yogurt, cream, and delicate whole spices.",
                 price: 440,
-                image: "https://images.unsplash.com/photo-1603894584714-f4b2b604a05a?auto=format&fit=crop&q=80&w=1200",
+                image: "https://images.unsplash.com/photo-1545247181-516773cae754?auto=format&fit=crop&q=80&w=1200",
                 isVeg: false,
                 spiceLevel: 1
             },
@@ -250,7 +250,7 @@ export const menuData: Record<string, MenuCategory> = {
                 name: "Dal Makhani",
                 description: "Whole black lentils slow-cooked overnight with spices, dollops of butter, and fresh cream.",
                 price: 320,
-                image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&q=80&w=1200",
+                image: "/images/dal-makhani.png",
                 isVeg: true,
                 spiceLevel: 0
             },
@@ -259,7 +259,7 @@ export const menuData: Record<string, MenuCategory> = {
                 name: "Chicken Changezi",
                 description: "Spicy and tangy Mughlai-style chicken gravy with a distinctive semi-dry texture.",
                 price: 460,
-                image: "https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?auto=format&fit=crop&q=80&w=1200",
+                image: "/images/chicken-changezi.png",
                 isVeg: false,
                 spiceLevel: 3
             }
@@ -269,7 +269,7 @@ export const menuData: Record<string, MenuCategory> = {
         id: "indo-chinese-fusion",
         name: "Indo-Chinese Fusion",
         description: "The perfect blend of bold Chinese techniques and fiery Indian flavors.",
-        bannerImage: "/images/hero.png",
+        bannerImage: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&q=80&w=1920",
         items: [
             {
                 id: "chilli-chicken",
@@ -285,7 +285,7 @@ export const menuData: Record<string, MenuCategory> = {
                 name: "Gobi Manchurian",
                 description: "Deep-fried crispy cauliflower florets tossed in a tangy ginger, garlic, and celery sauce.",
                 price: 240,
-                image: "https://images.unsplash.com/photo-1610192244261-3f33de3f55e4?auto=format&fit=crop&q=80&w=1200",
+                image: "/images/gobi-manchurian.png",
                 isVeg: true,
                 spiceLevel: 2
             },
@@ -294,7 +294,7 @@ export const menuData: Record<string, MenuCategory> = {
                 name: "Chicken Hakka Noodles",
                 description: "Wok-fried noodles with crisp vegetables and tender julienned chicken.",
                 price: 280,
-                image: "https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&q=80&w=1200",
+                image: "/images/chicken-hakka-noodles.png",
                 isVeg: false,
                 spiceLevel: 1
             },
@@ -303,7 +303,7 @@ export const menuData: Record<string, MenuCategory> = {
                 name: "Veg Fried Rice",
                 description: "Classic aromatic long-grain rice wok-tossed with finely chopped fresh vegetables.",
                 price: 220,
-                image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&q=80&w=1200",
+                image: "/images/veg-fried-rice.png",
                 isVeg: true,
                 spiceLevel: 1
             },
@@ -312,7 +312,7 @@ export const menuData: Record<string, MenuCategory> = {
                 name: "Dragon Chicken",
                 description: "Spicy thin chicken strips fried and tossed in a fiery red sauce with cashew nuts.",
                 price: 350,
-                image: "https://images.unsplash.com/photo-1562607311-2834248a846c?auto=format&fit=crop&q=80&w=1200",
+                image: "/images/dragon-chicken.png",
                 isVeg: false,
                 spiceLevel: 3
             },
@@ -321,7 +321,7 @@ export const menuData: Record<string, MenuCategory> = {
                 name: "Paneer Manchurian",
                 description: "Soft cottage cheese chunks prepared in a classic Indo-Chinese tangy sauce.",
                 price: 290,
-                image: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&q=80&w=1200",
+                image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&q=80&w=1200",
                 isVeg: true,
                 spiceLevel: 2
             }

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "TableMate – Real-Time Restaurant Reservations",
-  description: "Book your perfect table instantly. Real-time availability, instant confirmation, and effortless dining experience.",
+  title: "Spice Garden – Imperial Dining & Restaurant Reservations",
+  description: "Experience the finest Indian cuisine at Spice Garden. Book your perfect table instantly with real-time availability and instant confirmation.",
 };
 
 export default function RootLayout({
